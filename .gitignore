@@ -1,0 +1,16 @@
+# Ignore all environment files containing secrets
+**/.env
+**/.env.*
+
+# Ignore system junk
+.DS_Store
+Thumbs.db
+
+# Ignore large data directories if you accidentally mapped them here
+# (e.g. if you have a 'data' folder inside 'core')
+**/data/
+**/logs/
+
+#ignore gokapi binary files
+testing/gokapi-data/
+

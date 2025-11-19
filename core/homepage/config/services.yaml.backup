@@ -1,0 +1,57 @@
+---
+# Group for apps on M920q server
+# Uses tailscale MagicDNS address to consistently work across tailnet dynamically
+- Homelab:
+    - Portainer:
+        icon: portainer.svg
+        href: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:9443"
+        description: Docker Management UI
+        server: local         # This 'server' and 'container' part enables the status widget!
+        container: portainer
+        showStats: true
+        widget:
+          type: portainer
+          url: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:9443"
+          env: 3  # <-- Use your Portainer Environment ID (usually 1)
+          key: "{{HOMEPAGE_VAR_PORTAINER_KEY}}"         
+          fields: ["running", "stopped", "total"]
+    - Omada:
+        icon: omada.svg
+        href: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
+        description: Omada Controller Web UI 
+        server: local
+        container: omada-controller
+        widget:
+          type: omada
+          url: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
+          username: "{{HOMEPAGE_VAR_OMADA_USER}}"
+          password: "{{HOMEPAGE_VAR_OMADA_PASS}}"
+          site: Turmac_Home   
+                  
+
+# Groups for external apps (e.g on Pi)
+- Networking:
+    - Pi-hole:
+        icon: pi-hole.svg
+        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}/admin"
+        description: Network-Wide Ad Blocker
+
+        # Widget config for pi-hole
+        widget: 
+          type: pihole
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}"
+          version: 6
+          key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
+    - ATT Router:
+        icon: accesspoint.svg
+        href: http://192.168.1.254
+        description: ATT BGW320 Router Interface
+    - Tailscale:
+        icon: tailscale.svg
+        href: "https://login.tailscale.com/admin/machines"
+        description: VPN Mesh Status
+        widget:
+          type: tailscale
+          deviceid: "{{HOMEPAGE_VAR_TAILSCALE_ID}}"
+          key: "{{HOMEPAGE_VAR_TAILSCALE_KEY}}"  
+

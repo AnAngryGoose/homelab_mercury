@@ -1,0 +1,92 @@
+services:
+  # --- Portainer: For managing Docker ---
+  portainer:
+    image: portainer/portainer-ce:2.20.2 # Use this version until access bug is fixed
+    container_name: portainer
+    restart: unless-stopped 
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      # Socket binding: This is what lets Portainer *manage* all other containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Named volume for Portainer's database
+      - portainer_data:/data
+    ports:
+      - "9443:9443" # Secure UI
+      - "9000:9000" # Legacy UI
+      #- "8000:8000" # Edge Agent
+
+  # --- Homepage: Main dashboard ---
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    environment:
+      # This is added to allow access and provide exception to only default values
+      - HOMEPAGE_ALLOWED_HOSTS=mercury.tail474462.ts.net:3000,192.168.0.116:3000,localhost:3000,mercury:3000,100.102.187.93:3000,mercury.tail474462.ts.net:3000
+    env_file:
+      - .env
+    volumes:
+      # Socket binding (read-only): Lets Homepage widgets *see* container status
+      - /var/run/docker.sock:/var/run/docker.sock:ro 
+      # Bind mount for all your Homepage .yaml config files (EASIER TO MANAGE - recommended)
+      - ./homepage/config:/app/config
+    ports:
+      - "3000:3000"
+    # Optional: If you have file permission issues with the config volume,
+    # uncomment the line below. Find your user/group ID with the `id` command.
+    # user: "1000:1000"
+
+# --- Watchtower: Auto-Update Containers ---
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true       # Delete old images after update
+      - WATCHTOWER_POLL_INTERVAL=86400 # Check every 24 hours (seconds)
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    restart: unless-stopped
+
+  # --- Dozzle: Real-time Log Viewer ---
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_LEVEL=info
+    ports:
+      - "8081:8080" # Web UI on port 8081
+    restart: unless-stopped
+
+  # --- Uptime Kuma: Service Monitor ---
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - uptime_kuma_data:/app/data
+    ports:
+      - "3001:3001" # Web UI on port 3001
+    restart: unless-stopped
+
+  # --- Glances: System Monitor (The Backend for Homepage Widgets) ---
+  glances:
+    image: nicolargo/glances:latest
+    container_name: glances
+    pid: host # Vital: Allows it to see host processes
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - GLANCES_OPT=-w # Run in web server mode
+    ports:
+      - "61208:61208"
+    restart: unless-stopped
+
+# Named volumes for persistent data storage
+volumes:
+  # These volumes are managed by Docker in /var/lib/docker/volumes/
+  portainer_data:
+  homepage_config:
+   uptime_kuma_data:

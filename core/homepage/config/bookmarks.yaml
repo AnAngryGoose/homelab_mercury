@@ -1,0 +1,75 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/bookmarks
+
+- Developer:
+    - Github:
+        - abbr: GH
+          href: https://github.com/
+
+- Social:
+    - Reddit:
+        - abbr: RE
+          href: https://reddit.com/
+
+- Entertainment:
+    - YouTube:
+        - abbr: YT
+          href: https://youtube.com/
+
+# ----TO DO LIST ------
+
+- To-Do:
+    - Deploy Tailscale:
+        - icon: mdi-network
+          href: "#" # Using "#" makes it an unclickable title
+          description: Secure VPN Tunnel
+          
+    - Deploy Watchtower:
+        - icon: mdi-binoculars
+          href: "#"
+          description: For automatic container updates
+          
+    - Deploy Reverse Proxy:
+        - icon: mdi-swap-horizontal
+          href: "#"
+          description: Nginx Proxy Manager or Traefik
+
+    - Deploy Docker Socket Proxy:
+        - icon: mdi-shield-key
+          href: "#"
+          description: Secure Docker socket for Homepage
+
+
+    - Research DAS Enclosure:
+        - icon: mdi-database-search
+          href: "#" # Using "#" makes it an unclickable title
+          description: Find a good TerraMaster D4-300 deal
+
+    - Configure NUT:
+        - icon: mdi-ups
+          href: "#"
+          description: Set up NUT on the Pi 4B for the UPS
+
+    - Set up Backups:
+        - icon: mdi-archive-arrow-down
+          href: "#"
+          description: Plan TrueNAS VM or other backup node
+
+
+
+- Future Projects:
+    - Explore MQTT:
+        - icon: mdi-home-automation
+          href: "#"
+          description: Integrate home automation sensors
+
+    - Set up Unbound:
+        - icon: mdi-dns
+          href: "#"
+          description: Configure Unbound on the Pi 4B
+          
+    - Learn Git:
+        - icon: mdi-git
+          href: "#"
+          description: Master branching, commits, and remotes
