@@ -1,0 +1,27 @@
+# --- Filebrowser Quantum = https://filebrowserquantum.com/en/docs/ ---
+
+services:
+  filebrowser:
+    image: gtstef/filebrowser:beta
+    container_name: filebrowser-quantum
+    restart: unless-stopped
+    user: 1000:1000 # Adjust to match your host user ID for proper file permissions
+    ports:
+      - "8080:80"
+  # OPTIONAL: Pass through GPU for faster video thumbnail generation
+  # devices:
+  # - /dev/dri:/dev/dri
+    environment:
+      - FILEBROWSER_CONFIG=/config/config.yaml # overrides the default path which is ./config.yaml
+      - FILEBROWSER_ADMIN_PASSWORD=${FILEBROWSER_ADMIN_PASSWORD} # Set admin password from .env file
+   
+    volumes:
+    # Mount your source files to be managed
+      - ./sources/testsource1:/media
+      - ./sources/testsource2:/docs
+      - ./sources/users:/users
+    # Mount config and database files for persistence
+      - ./data/config.yaml:/config/config.yaml
+    # Keeps the database persistent - needed for bind mount setup
+      - ./data:/data
+

@@ -14,8 +14,17 @@ Thumbs.db
 #ignore gokapi binary files
 testing/gokapi-data/
 
-# Ignore CouchDB ini file
-obsidian/local.d/docker.ini
+# Ignore CouchDB ini file & data
+obsidian/couchdb-etc/*
+obsidian/couchdb-data/*
+
 
 # Recursively ignore any folder named .pastebin
 **/.pastebin
+
+# ignore testing folder
+/testing/
+
+
+
+
