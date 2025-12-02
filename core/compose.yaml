@@ -1,21 +1,4 @@
 services:
-  # --- Portainer: For managing Docker ---
-  portainer:
-    image: portainer/portainer-ce:2.20.2 # Use this version until access bug is fixed
-    container_name: portainer
-    restart: unless-stopped 
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      # Socket binding: This is what lets Portainer *manage* all other containers
-      - /var/run/docker.sock:/var/run/docker.sock
-      # Named volume for Portainer's database
-      - portainer_data:/data
-    ports:
-      - "9443:9443" # Secure UI
-      - "9000:9000" # Legacy UI
-      #- "8000:8000" # Edge Agent
-
   # --- Homepage: Main dashboard ---
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
@@ -23,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       # This is added to allow access and provide exception to only default values
-      - HOMEPAGE_ALLOWED_HOSTS=mercury.tail474462.ts.net:3000,192.168.0.116:3000,localhost:3000,mercury:3000,100.102.187.93:3000,mercury.tail474462.ts.net:3000
+      - HOMEPAGE_ALLOWED_HOSTS=${HOMEPAGE_ALLOWED_HOSTS}
     env_file:
       - .env
     volumes:
@@ -37,39 +20,6 @@ services:
     # uncomment the line below. Find your user/group ID with the `id` command.
     # user: "1000:1000"
 
-# --- Watchtower: Auto-Update Containers ---
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_CLEANUP=true       # Delete old images after update
-      - WATCHTOWER_POLL_INTERVAL=86400 # Check every 24 hours (seconds)
-      - WATCHTOWER_INCLUDE_STOPPED=true
-    restart: unless-stopped
-
-  # --- Dozzle: Real-time Log Viewer ---
-  dozzle:
-    image: amir20/dozzle:latest
-    container_name: dozzle
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - DOZZLE_LEVEL=info
-    ports:
-      - "8081:8080" # Web UI on port 8081
-    restart: unless-stopped
-
-  # --- Uptime Kuma: Service Monitor ---
-  uptime-kuma:
-    image: louislam/uptime-kuma:1
-    container_name: uptime-kuma
-    volumes:
-      - uptime_kuma_data:/app/data
-    ports:
-      - "3001:3001" # Web UI on port 3001
-    restart: unless-stopped
 
   # --- Glances: System Monitor (The Backend for Homepage Widgets) ---
   glances:
@@ -84,9 +34,91 @@ services:
       - "61208:61208"
     restart: unless-stopped
 
-# Named volumes for persistent data storage
+
+  # --- Watchtower: Auto-Update Containers ---
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_API_VERSION=1.45       # required for compatibility with Docker Engine 29.0+
+      - WATCHTOWER_CLEANUP=true       # Delete old images after update
+      - WATCHTOWER_POLL_INTERVAL=86400 # Check every 24 hours (seconds)
+      - WATCHTOWER_INCLUDE_STOPPED=true
+
+      ### 1. Enable Email Mode ###
+      - WATCHTOWER_NOTIFICATIONS=email
+      # 2. Who sends the email (Must match your Gmail user)
+      - WATCHTOWER_NOTIFICATION_EMAIL_FROM=${MYEMAIL}
+      # 3. Who receives the email (Can be the same address)
+      - WATCHTOWER_NOTIFICATION_EMAIL_TO=${MYEMAIL}
+      # 4. Gmail Server Settings (Standard)
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=smtp.gmail.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=587
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_TLS_SKIP_VERIFY=false
+      # 5. Auth Credentials
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=${MYEMAIL}
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=${MYEMAILPASS}  # <-- Paste App Password Here
+      
+      # 6. Optional: Rate limit emails (Delay in seconds)
+      - WATCHTOWER_NOTIFICATION_EMAIL_DELAY=2
+    restart: unless-stopped
+
+
+
+  # --- Dozzle: Real-time Log Viewer ---
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_LEVEL=info
+    ports:
+      - "8081:8080" # Web UI on port 8081
+    restart: unless-stopped
+
+
+  # --- Uptime Kuma: Service Monitor ---
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - uptime_kuma_data:/app/data
+    ports:
+      - "3001:3001" # Web UI on port 3001
+    restart: unless-stopped
+
+  # --- BESZEL HUB (The Dashboard) ---
+  beszel-hub:
+    image: henrygd/beszel
+    container_name: beszel-hub
+    restart: unless-stopped
+    networks:
+      - beszel_net  # Keep internal, expose via NPM later
+    ports:
+      - "8090:8090"   # Exposed locally for initial setup
+    volumes:
+      - ./beszel/data:/beszel_data
+
+  # --- BESZEL AGENT (The Sensor) ---
+  beszel-agent:
+    image: henrygd/beszel-agent
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: "host"  # CRITICAL: Must be on host to read actual CPU/Disk/Network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # To monitor other docker containers
+      - /dev/dri:/dev/dri # For GPU monitoring 
+      - /:/mnt/root_drive:ro
+    environment:
+      - PORT=45876
+      - KEY=${BESZEL_KEY} 
+      - EXTRA_FILESYSTEMS=/mnt/root_drive
+networks:
+  beszel_net:
+    driver: bridge
+
 volumes:
-  # These volumes are managed by Docker in /var/lib/docker/volumes/
-  portainer_data:
-  homepage_config:
-   uptime_kuma_data:
+  uptime_kuma_data:

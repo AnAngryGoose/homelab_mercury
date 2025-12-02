@@ -6,13 +6,10 @@
 .DS_Store
 Thumbs.db
 
-# Ignore large data directories if you accidentally mapped them here
+# Ignore large data directories if mapped here
 # (e.g. if you have a 'data' folder inside 'core')
 **/data/
 **/logs/
-
-#ignore gokapi binary files
-testing/gokapi-data/
 
 # Ignore CouchDB ini file & data
 obsidian/couchdb-etc/*
@@ -25,6 +22,8 @@ obsidian/couchdb-data/*
 # ignore testing folder
 /testing/
 
+# Ignore the Nginx Proxy Manager data folders
+**/npm/
 
-
-
+# Ignore Filebrowser database and settings
+filebrowser/config/config.yaml
