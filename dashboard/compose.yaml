@@ -27,6 +27,7 @@ services:
     # user: "1000:1000"
 
 
+
   # --- Glances: System Monitor (The Backend for Homepage Widgets) ---
   glances:
     image: nicolargo/glances:latest
@@ -44,12 +45,12 @@ services:
 
   # --- Watchtower: Auto-Update Containers ---
   watchtower:
-    image: containrrr/watchtower
+    image: nickfedor/watchtower
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - DOCKER_API_VERSION=1.45       # required for compatibility with Docker Engine 29.0+
+
       - WATCHTOWER_CLEANUP=true       # Delete old images after update
       - WATCHTOWER_POLL_INTERVAL=86400 # Check every 24 hours (seconds)
       - WATCHTOWER_INCLUDE_STOPPED=true
@@ -81,6 +82,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DOZZLE_LEVEL=info
+    networks: 
+      - proxy_net
     ports:
       - "8081:8080" # Web UI on port 8081
     restart: unless-stopped
@@ -95,7 +98,7 @@ services:
     volumes:
       - ./uptime_kuma_data:/app/data
     ports:
-      - "3001:3001" # Web UI on port 3001
+      - "3001:3001"
     restart: unless-stopped
 
 

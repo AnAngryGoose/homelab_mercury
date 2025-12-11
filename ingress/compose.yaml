@@ -36,6 +36,6 @@ services:
 networks:
   tunnel_net:
     driver: bridge 
-    internal: true # Optional: Blocks internet access for containers on this net (except what they get via connected peers), adding security.
+    #internal: true # Optional: Blocks internet access for containers on this net (except what they get via connected peers), adding security.
   proxy_net:
     external: true

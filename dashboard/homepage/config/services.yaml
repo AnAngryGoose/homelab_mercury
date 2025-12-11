@@ -83,7 +83,7 @@
             url: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
             username: "{{HOMEPAGE_VAR_OMADA_USER}}"
             password: "{{HOMEPAGE_VAR_OMADA_PASS}}"
-            site: Turmac_Home
+            site: "{{HOMEPAGE_VAR_OMADA_SITE}}"
 
     - Pi-hole:
         icon: pi-hole.svg
