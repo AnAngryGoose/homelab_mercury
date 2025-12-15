@@ -102,6 +102,11 @@ services:
     restart: unless-stopped
 
 
+### ------------------------------ ###
+### ------------ BESZEL ---------- ###
+### ------------------------------ ###
+
+
   # --- BESZEL HUB (The Dashboard) ---
   beszel-hub:
     image: henrygd/beszel

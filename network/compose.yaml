@@ -15,8 +15,8 @@ services:
       - SHOW_MONGODB_LOGS=false
       - TZ=America/Chicago
     # networks: 
-    #   - proxy_net   # internal net for NPM proxy
-    volumes:    # Named Volumes to allow for easier transfer and data persistance.   
+    #   - proxy_net  
+    volumes:   
       - omada_data:/opt/tplink/EAPController/data
       - omada_logs:/opt/tplink/EAPController/logs
       - omada_work:/opt/tplink/EAPController/work

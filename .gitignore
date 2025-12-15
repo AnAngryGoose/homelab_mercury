@@ -39,3 +39,4 @@ filebrowser/config/config.yaml
 #ignore obsidian db files
 **/couchdb-data
 **/couchdb-etc
+dashboard/homepage/config/output.txt

@@ -7,11 +7,25 @@
     target: _blank
 
 # System Stats (Powered by Glances container)
-- resources:
+- glances:
+    url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+    label: mercury
     cpu: true
-    memory: true
-    disk: /
-    celsius: true
+    mem: true
+    cputemp: true # disabled by default
+    uptime: true # disabled by default
+    disk: /rootfs
+    version: 4
+    
+- glances:
+    url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+    label: jupiter
+    cpu: true
+    mem: true
+    cputemp: true # disabled by default
+    uptime: true # disabled by default
+    disk: /mnt/storage
+    version: 4
 
 # Weather (Optional)
 - openmeteo:

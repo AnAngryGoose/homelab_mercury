@@ -1,19 +1,75 @@
 ---
+# --- GLANCES METRICS - Mercury ---
+- Machines: 
+    - mercury: 
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            metric: info
+            version: 4
+            chart: true
+    - CPU Temp:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            metric: sensor:Package id 0
+            version: 4
+            chart: true       # Default is true. Set to false for text-only.
+    - Network:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            label: Mercury
+            metric: network:eno1      
+            version: 4        # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+    - Disk I/O:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            label: Mercury
+            metric: disk:sda
+            version: 4        # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+
+# --- Glances METRICS - Jupiter ---  
+    - jupiter: 
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            metric: info
+            version: 4
+            chart: true
+    - CPU Temp.:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            metric: sensor:Package id 0
+            version: 4
+            chart: true       # Default is true. Set to false for text-only.
+    - Network.:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            label: Jupiter
+            metric: network:eno1    
+            version: 4       # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+    - /mnt/storage:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            label: Jupiter
+            metric: fs:/mnt/storage
+            version: 4        # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+
+
 # --- ROW 1: MANAGEMENT ---
 - Management:
-    - Dockge:
-        icon: dockge.svg
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:5001"
-        description: Stack Manager
-        server: local
-        container: dockge # Matches container_name in dockge/compose.yaml
-        widget:
-            type: dockge
-            url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:5001"
-
     - Dozzle:
         icon: dozzle.svg
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8081"
+        href: "http://dozzle.{{HOMEPAGE_VAR_URLBASE}}"
         description: Log Viewer
         server: local
         container: dozzle
@@ -21,66 +77,81 @@
 
     - File Browser:
         icon: filebrowser.svg
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8080"
+        href: "http://fb.{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8080"
         description: File Manager
         server: local
         container: filebrowser
 
-    - Watchtower:
-        icon: watchtower.svg
-        # Watchtower has no UI, so we link to its logs in Dozzle
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8081/container/watchtower"
-        description: Auto-Updater
-        server: local
-        container: watchtower
+
+    - NGINX Proxy Manager:
+        icon: npm.svg
+        href: "http://npm.{{HOMEPAGE_VAR_URLBASE}}"
+        description: 
+        server: local 
+        container: npm
         widget:
-            type: watchtower
+            type: npm
+            url: "https://npm.{{HOMEPAGE_VAR_URLBASE}}"
+            username: "{{HOMEPAGE_VAR_NPM_USER}}"
+            password: "{{HOMEPAGE_VAR_NPM_PASS}}"
+
 
 # --- ROW 2: MONITORING ---
 - Monitoring:
-    - Beszel:
-        icon: beszel.png
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8090"
-        description: System Monitor
-        server: local
-        container: beszel-hub
-        widget:
-            type: beszel
-            url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8090"
-            systemId: "1" # Usually ID 1 if it's the first agent
+    - Beszel - Jupiter:
+            icon: beszel.png
+            href: "https://beszel.{{HOMEPAGE_VAR_URLBASE}}"
+            description: System Monitor
+            server: local
+            container: beszel-hub
+            widget:
+               type: beszel
+               url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:8090
+               username: "{{HOMEPAGE_VAR_BESZEL_USER}}"
+               password: "{{HOMEPAGE_VAR_BESZEL_PASS}}"
+               systemId: mercury
+               version: 2
+               fields: ["disk", "network", "cpu", "memory"] 
+    - Beszel - Jupiter:
+            icon: beszel.png
+            href: "https://beszel.{{HOMEPAGE_VAR_URLBASE}}"
+            description: System Monitor
+            server: local
+            container: beszel-hub
+            widget:
+               type: beszel
+               url: http://{HOMEPAGE_VAR_MERCURY_IP}:8090
+               username: "{{HOMEPAGE_VAR_BESZEL_USER}}"
+               password: "{{HOMEPAGE_VAR_BESZEL_PASS}}"
+               systemId: jupiter
+               version: 2
+               fields: ["disk", "network", "cpu", "memory"] 
+
+
+
 
     - Uptime Kuma:
         icon: uptime-kuma.svg
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:3001"
+        href: "http://kuma.{{HOMEPAGE_VAR_URLBASE}}:3001"
         description: Uptime Status
         server: local
         container: uptime-kuma
         widget:
             type: uptimekuma
-            url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:3001"
+            url: "http://{{HOMEPAGE_VAR_MERCURY_IP}}:3001"
             slug: "default" # Create a status page in Kuma to get this!
-
-    - Speedtest:
-        icon: speedtest-tracker.svg
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:3000"
-        description: Bandwidth Tracker
-        server: local
-        container: speedtest-tracker
-        widget:
-            type: speedtest
-            url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:3000"
 
 # --- ROW 3: NETWORKING ---
 - Networking:
     - Omada Controller:
         icon: omada.svg
-        href: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
+        href: "http://omada.{{HOMEPAGE_VAR_URLBASE}}"
         description: Network Admin
         server: local
         container: omada-controller
         widget:
             type: omada
-            url: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
+            url: "http://{{HOMEPAGE_VAR_MERCURY_IP}}:8043"
             username: "{{HOMEPAGE_VAR_OMADA_USER}}"
             password: "{{HOMEPAGE_VAR_OMADA_PASS}}"
             site: "{{HOMEPAGE_VAR_OMADA_SITE}}"

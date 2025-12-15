@@ -2,10 +2,20 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/configs/settings/
 
-title: "Kepler"
-
+title: "Homepage"
+headerStyle: boxedWidgets
+language: en
+hideVersion: true
+useEqualHeights: true
 
 layout:
+  jupiter:
+    style:
+    Columns: 1
+    header: true
+  Machines:
+    style: row
+    columns: 4
   Management:
     style: row
     columns: 4
