@@ -1,6 +1,6 @@
 # Homelab Services
 
-A curated list of self-hosted services and docker containers running in my homelab environment. Work in progress. 
+A curated list of self-hosted services and docker containers running in my homelab environment. Work in progress. Not all listed here are in this repo. 
 
 ## Table of Contents
 
