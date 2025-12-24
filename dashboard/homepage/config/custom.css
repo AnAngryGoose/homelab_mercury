@@ -1,0 +1,176 @@
+/*==================================
+  HOMEPAGE CSS - GRUVBOX PRISM
+  Mode: Clean (No !important)
+==================================*/
+/*==================================
+  1. FONT IMPORTS
+==================================*/
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap');
+/*==================================
+  2. CSS VARIABLES
+==================================*/
+:root {
+  --my-font: "Fira Mono", monospace;
+  /* Gruvbox Palette */
+  --gb-bg:       #282828;
+  --gb-card:     #32302f;
+  --gb-cream:    #fbf1c7;
+  
+  /* Prism Colors */
+  --gb-yellow:   #fabd2f;
+  --gb-green:    #98971a;
+  --gb-purple:   #d3869b;
+  --gb-blue:     #83a598;
+  --gb-orange:   #fe8019;
+  --gb-red:      #fb4934;
+  /* Settings */
+  --border-width: 2px;
+  --border-radius: 6px; 
+}
+/*==================================
+  3. BASE STYLES
+==================================*/
+/* Global Reset - but exclude Docker stats */
+*:not(.service-container-stats):not(.service-container-stats *) {
+  font-family: var(--my-font);
+  color: var(--gb-yellow);
+  text-shadow: none;
+}
+/* Page Background */
+body, html, #__next, #page_container {
+  background-color: var(--gb-bg);
+}
+/* Header Text */
+h1, h2, h3, .text-xl, .group-title {
+  color: var(--gb-green);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+/*==================================
+  4. INTERACTIVE STYLES (CARDS)
+==================================*/
+/* Card Base Look */
+.services-item, 
+.bookmark-item, 
+.widget {
+  background-color: var(--gb-card);
+  border: var(--border-width) solid var(--gb-yellow);
+  border-radius: var(--border-radius);
+  box-shadow: 4px 4px 0px #1d2021;
+  transition: all 0.2s ease;
+}
+/* Fix Internal Transparency */
+.services-item a, 
+.services-item div, 
+.widget div {
+    background: transparent;
+}
+/* Hover Effects */
+.services-item:hover, 
+.bookmark-item:hover,
+.widget:hover {
+  border-color: var(--gb-purple);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--gb-purple);
+  z-index: 10;
+}
+/*==================================
+  5. SPECIFIC COMPONENT FIXES
+==================================*/
+/* Search Bar */
+input {
+  background-color: var(--gb-card);
+  border: 2px solid #3c3836;
+  color: var(--gb-blue);
+  border-radius: 20px;
+}
+/* Icons */
+a, .service-icon img, .service-icon svg {
+    color: var(--gb-orange);
+}
+/* Top Bar Stats (Glances) */
+.glances-item span:last-child, 
+.resources-item span:last-child {
+    color: var(--gb-red);
+    font-weight: bold;
+}
+/* Search Icon */
+svg.w-5.h-5 {
+    color: var(--gb-yellow);
+}
+/*==================================
+  5.5 DOCKER CONTAINER STATUS
+==================================*/
+/* Docker Stats Container */
+.service-container-stats {
+  background-color: rgba(40, 40, 40, 0.6);
+  border: 1px solid #3c3836;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Individual Status Text */
+.service-container-stats span {
+  font-family: var(--my-font);
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Running Status - Green */
+.service-container-stats .text-green-500,
+.service-container-stats span[class*="green"] {
+  color: var(--gb-green);
+}
+
+/* Healthy Status - Blue */
+.service-container-stats .text-blue-500,
+.service-container-stats span[class*="blue"] {
+  color: var(--gb-blue);
+}
+
+/* Warning/Unhealthy - Orange */
+.service-container-stats .text-yellow-500,
+.service-container-stats .text-orange-500,
+.service-container-stats span[class*="yellow"],
+.service-container-stats span[class*="orange"] {
+  color: var(--gb-orange);
+}
+
+/* Error/Not Found - Red */
+.service-container-stats .text-red-500,
+.service-container-stats span[class*="red"] {
+  color: var(--gb-red);
+}
+
+/* Stopped/Exited - Purple */
+.service-container-stats .text-gray-500,
+.service-container-stats span[class*="gray"] {
+  color: var(--gb-purple);
+  opacity: 0.8;
+}
+
+/* Hover Effect on Stats */
+.service-container-stats:hover {
+  background-color: rgba(50, 48, 47, 0.8);
+  border-color: var(--gb-yellow);
+}
+
+/*==================================
+  6. RESPONSIVE / UTILITY
+==================================*/
+@media screen and (max-width: 768px) {
+  #myTab {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+}
+footer, .settings-toggle {
+    display: none;
+}

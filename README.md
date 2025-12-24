@@ -15,12 +15,13 @@ A list of self-hosted services and docker containers running in my homelab. Work
 
 ---
 
-## Media & Streaming
+## Media & Sharing
 
 Software for organizing, streaming, and managing media content.
 
 - [Plex](https://www.plex.tv/) - Client-server media player system to stream personal media collections.
 - [Samba](https://www.samba.org/) - The standard Windows interoperability suite of programs for Linux and Unix, used here for network file sharing.
+- [copyparty](https://github.com/9001/copyparty) - Portable file server with accelerated resumable uploads, deduplication, WebDAV, FTP, zeroconf, media indexer, video thumbnails, audio transcoding, and write-only folders, in a single file with no mandatory dependencies. 
 
 ## Automation & Downloaders
 
@@ -68,4 +69,3 @@ General productivity tools and start pages.
 - [IT-Tools](https://it-tools.tech/) - A collection of handy tools for developers and IT people.
 - [Bento4 / BentoPDF](https://github.com/axiom-media/bento4) - Likely a suite of tools for processing media or PDF files (Implied from container name).
 - [CouchDB](https://couchdb.apache.org/) - A database that uses JSON for documents, JavaScript for MapReduce indexes, and regular HTTP for an API. (Used for Obsidian LiveSync or similar backends).
-- [copyparty](https://github.com/9001/copyparty) - Portable file server with accelerated resumable uploads, deduplication, WebDAV, FTP, zeroconf, media indexer, video thumbnails, audio transcoding, and write-only folders, in a single file with no mandatory dependencies. 

@@ -1,0 +1,35 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/info-widgets/
+
+- search:
+    provider: google
+    target: _blank
+
+# System Stats (Powered by Glances container)
+- glances:
+    url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+    label: mercury
+    cpu: true
+    mem: true
+    cputemp: true # disabled by default
+    uptime: true # disabled by default
+    disk: /rootfs
+    version: 4
+    
+- glances:
+    url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+    label: jupiter
+    cpu: true
+    mem: true
+    cputemp: true # disabled by default
+    uptime: true # disabled by default
+    disk: /mnt/storage
+    version: 4
+
+# Weather (Optional)
+- openmeteo:
+    label: Home
+    latitude: 30.6812773 
+    longitude: -88.2908238
+    units: imperial

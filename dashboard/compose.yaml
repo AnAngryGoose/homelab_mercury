@@ -19,7 +19,7 @@ services:
       # Socket binding (read-only): Lets Homepage widgets *see* container status
       - /var/run/docker.sock:/var/run/docker.sock:ro 
       # Bind mount for all your Homepage .yaml config files (EASIER TO MANAGE - recommended)
-      - ${APPDATA}/homepage/config:/app/config
+      - ./homepage/config:/app/config
     ports:
       - "3000:3000"
     # Optional: If you have file permission issues with the config volume,

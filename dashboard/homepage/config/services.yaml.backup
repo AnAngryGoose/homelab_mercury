@@ -1,0 +1,118 @@
+---
+# Group for apps running on your Lenovo M920q (Mercury)
+# Uses Tailscale MagicDNS variable for consistent access
+
+# Service Groups
+- Homelab:
+    - Omada:
+        icon: omada.svg
+        href: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
+        description: Network Controller
+        server: local
+        container: omada-controller
+        widget:
+          type: omada
+          url: "https://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8043"
+          username: "{{HOMEPAGE_VAR_OMADA_USER}}"
+          password: "{{HOMEPAGE_VAR_OMADA_PASS}}"
+          site: Turmac_Home   # If this fails, try using the Site ID from the URL
+
+    - Watchtower:
+        icon: watchtower.svg
+        # Watchtower has no UI, so we link to the logs viewer
+        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8081/container/watchtower"
+        description: Auto-Updater
+        server: local
+        container: watchtower
+        widget:
+          type: watchtower
+          # No URL needed if sharing docker socket, but good to be explicit
+          # Note: Watchtower widget is very simple (shows status/last run)
+
+    - Dozzle:
+        icon: dozzle.svg
+        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:8081"
+        description: Real-time Logs
+        server: local
+        container: dozzle
+        
+    - Uptime Kuma:
+        icon: uptime-kuma.svg
+        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:3001"
+        description: Service Monitor
+        server: local
+        container: uptime-kuma
+        widget:
+          type: uptimekuma
+          url: "http://uptime-kuma:3001"
+          slug: "default"     # Create a 'Status Page' in Kuma and put the slug here
+
+# Group for System Monitoring
+- Monitoring:
+    - System Info:
+        widget:
+          type: glances
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:61208"
+          metric: info
+          version: 4
+
+    - CPU Load:
+        widget:
+          type: glances
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:61208"
+          metric: cpu
+          chart: true
+          version: 4
+
+    - Memory Usage:
+        widget:
+          type: glances
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:61208"
+          metric: memory
+          chart: true
+          version: 4
+
+    - Network (eth0):
+        widget:
+          type: glances
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:61208"
+          metric: network:eth0  # Verify your interface name is actually 'eth0'
+          chart: true
+          version: 4
+
+    - Root Storage:
+        widget:
+          type: glances
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_MERCURY}}:61208"
+          metric: fs:/
+          chart: true
+          version: 4
+      
+
+# Group for External Hardware (Pi, Router, VPN)
+- Networking:
+    - Pi-hole:
+        icon: pi-hole.svg
+        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}/admin"
+        description: Network-Wide Ad Blocker
+        widget:
+          type: pihole
+          url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}"
+          key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
+          version: 6 # Use 5 if you haven't updated to the beta
+
+    - ATT Router:
+        icon: accesspoint.svg
+        href: "http://{{HOMEPAGE_VAR_ATT_ROUTER_IP}}"
+        description: BGW320 Gateway
+        # No widget for ATT BGW320, just a link
+
+    - Tailscale:
+        icon: tailscale.svg
+        href: "https://login.tailscale.com/admin/machines"
+        description: VPN Mesh Status
+        widget:
+          type: tailscale
+          deviceid: "{{HOMEPAGE_VAR_TAILSCALE_ID}}"
+          key: "{{HOMEPAGE_VAR_TAILSCALE_KEY}}"
+          fields: ["address", "last_seen", "expires"]

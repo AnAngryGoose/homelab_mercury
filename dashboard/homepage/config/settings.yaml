@@ -1,0 +1,48 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+title: "Homepage"
+headerStyle: boxedWidgets
+language: en
+hideVersion: true
+useEqualHeights: true
+
+layout:
+ # ---- Page 1 - Applications Overview ----
+  Management:
+    tab: Applications
+    style: row
+    columns: 4
+  Monitoring:
+    tab: Applications
+    style: row
+    columns: 4
+  Networking:
+    tab: Applications
+    style: row 
+    columns: 4
+  Media: 
+    tab: Applications
+    style: row
+    columns: 6
+  Tools: 
+    tab: Applications
+    style: row
+    columns: 4
+
+  # ---- Page 2 - Machines Overview ----
+  Mercury:
+    tab: Machines
+    style: column
+    columns: 1
+  Jupiter:
+    tab: Machines
+    style: column
+    Columns: 1
+    header: true
+
+
+providers:
+  openweathermap: openweathermapapikey
+  weatherapi: weatherapiapikey

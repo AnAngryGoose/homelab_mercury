@@ -1,4 +1,6 @@
 services:
+
+### --- IT Tools --- ### https://github.com/CorentinTh/it-tools
   it-tools:
     image: corentinth/it-tools:latest
     container_name: it-tools
@@ -9,14 +11,9 @@ services:
       - proxy_net  # Add to your proxy network if using NPM or Homepage
     # Optional: If you want to use the "My Tools" feature effectively across sessions,
     # it uses browser local storage, so no volume is needed on the server side.
-    
-    # Optional: Labels for Homepage (if you are using it)
-    labels:
-      - "homepage.group=Tools"
-      - "homepage.name=IT-Tools"
-      - "homepage.icon=it-tools.png"
-      - "homepage.href=http://192.168.0.116:8071" # Or https://it-tools.domain.com if proxied
-      - "homepage.description=Developer & IT utilities"
+
+
+### --- Bento PDF --- ### https://github.com/alam00000/bentopdf
 
   bentopdf:
     image: bentopdf/bentopdf-simple:latest
@@ -24,16 +21,23 @@ services:
     ports:
       - '3005:8080'
     restart: unless-stopped
-      # Optional: Set to 'true' for a simplified UI (hides branding/marketing text)
-    
-    # Optional: Labels for Homepage
-    labels:
-      - "homepage.group=Tools"
-      - "homepage.name=Bento PDF"
-      - "homepage.icon=bentopdf.png"
-      - "homepage.href=http://192.168.0.116:3005" 
-      - "homepage.description=PDF tools"
 
+
+### --- ConvertX --- ### https://github.com/C4illin/ConvertX
+  convertx:
+    image: ghcr.io/c4illin/convertx
+    container_name: convertx
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - JWT_SECRET=${CXJWTTOKEN} # will use randomUUID() if unset
+      # - HTTP_ALLOWED=true # uncomment this if accessing it over a non-https connection
+    volumes:
+      - /mnt/nvme_storage/appdata/convertx/data:/app/data # database files - SQLite 
+      
+
+      
 networks:
   proxy_net:
     external: true

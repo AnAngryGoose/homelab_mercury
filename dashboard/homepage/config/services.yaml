@@ -1,0 +1,258 @@
+---
+# ---------------------------------
+# --- GLANCES METRICS - Mercury ---
+# ---------------------------------
+- Mercury: 
+    - mercury: 
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            metric: info
+            version: 4
+            chart: true
+    - CPU Temp:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            metric: sensor:Package id 0
+            version: 4
+            chart: true       # Default is true. Set to false for text-only.
+    - Network:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            label: Mercury
+            metric: network:eno1      
+            version: 4        # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+    - Disk I/O:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:61208
+            label: Mercury
+            metric: disk:sda
+            version: 4        # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+            
+# ---------------------------------
+# --- Glances METRICS - Jupiter --- 
+# ---------------------------------
+- Jupiter:  
+    - Jupiter: 
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            metric: info
+            version: 4
+            chart: true
+    - CPU Temp.:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            metric: sensor:Package id 0
+            version: 4
+            chart: true       # Default is true. Set to false for text-only.
+    - Network.:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            label: Jupiter
+            metric: network:eno1    
+            version: 4       # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+    - /mnt/storage:
+        widget:
+            type: glances
+            url: http://{{HOMEPAGE_VAR_JUPITER_IP}}:61208
+            label: Jupiter
+            metric: fs:/mnt/storage
+            version: 4        # Required if you are running Glances v4+
+            chart: true       # Default is true. Set to false for text-only.
+
+# -------------------------
+# --- ROW 1: MANAGEMENT ---
+# -------------------------
+- Management:
+        
+    - NGINX Proxy Manager:
+        icon: npm.svg
+        href: "http://npm.{{HOMEPAGE_VAR_URLBASE}}"
+        description: 
+        server: local 
+        container: npm
+        widget:
+            type: npm
+            url: "https://npm.{{HOMEPAGE_VAR_URLBASE}}"
+            username: "{{HOMEPAGE_VAR_NPM_USER}}"
+            password: "{{HOMEPAGE_VAR_NPM_PASS}}"
+
+# -------------------------
+# --- ROW 2: MONITORING ---
+# -------------------------
+- Monitoring:
+    - Dozzle:
+        icon: dozzle.svg
+        href: "http://dozzle.{{HOMEPAGE_VAR_URLBASE}}"
+        description: Log Viewer
+        server: local
+        container: dozzle
+    - Mercury - Uptime:
+        icon: uptime-kuma.svg
+        href: "http://kuma.{{HOMEPAGE_VAR_URLBASE}}:3001"
+        description: 192.168.0.116
+        server: local
+        container: uptime-kuma
+        widget:
+            type: uptimekuma
+            url: "http://{{HOMEPAGE_VAR_MERCURY_IP}}:3001"
+            slug: mercury
+            
+        
+    - Beszel - Mercury:
+            icon: beszel.png
+            href: "https://beszel.{{HOMEPAGE_VAR_URLBASE}}"
+            description: System Monitor
+            server: local
+            container: beszel-hub
+            widget:
+               type: beszel
+               url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:8090
+               username: "{{HOMEPAGE_VAR_BESZEL_USER}}"
+               password: "{{HOMEPAGE_VAR_BESZEL_PASS}}"
+               systemId: mercury
+               version: 2
+               fields: ["disk", "network", "cpu", "memory"] 
+    - Beszel - Jupiter:
+            icon: beszel.png
+            href: "https://beszel.{{HOMEPAGE_VAR_URLBASE}}"
+            description: System Monitor
+            server: local
+            container: beszel-hub
+            widget:
+               type: beszel
+               url: http://{{HOMEPAGE_VAR_MERCURY_IP}}:8090
+               username: "{{HOMEPAGE_VAR_BESZEL_USER}}"
+               password: "{{HOMEPAGE_VAR_BESZEL_PASS}}"
+               systemId: jupiter
+               version: 2
+               fields: ["disk", "network", "cpu", "memory"] 
+
+
+# -------------------------
+# --- ROW 3: NETWORKING ---
+# -------------------------
+- Networking:
+    - Omada Controller:
+        icon: omada.svg
+        href: "https://omada.{{HOMEPAGE_VAR_URLBASE}}"
+        description: Network Admin
+        server: local
+        container: omada-controller
+        widget:
+            type: omada
+            url: "https://{{HOMEPAGE_VAR_MERCURY_IP}}:8043"
+            username: "{{HOMEPAGE_VAR_OMADA_USER}}"
+            password: "{{HOMEPAGE_VAR_OMADA_PASS}}"
+            site: "{{HOMEPAGE_VAR_OMADA_SITE}}"
+
+    - Pi-hole:
+        icon: pi-hole.svg
+        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}/admin"
+        description: DNS Sinkhole
+        widget:
+            type: pihole
+            url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}"
+            key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
+            version: 6
+
+    - Tailscale:
+        icon: tailscale.svg
+        href: "https://login.tailscale.com/admin/machines"
+        description: VPN Mesh
+        widget:
+            type: tailscale
+            deviceid: "{{HOMEPAGE_VAR_TAILSCALE_ID}}"
+            key: "{{HOMEPAGE_VAR_TAILSCALE_KEY}}"
+            fields: ["status", "last_seen"]
+
+# ---------------------
+# --- Row 4: Media ----
+# ---------------------
+- Media:
+    - Plex: 
+        icon: plex.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:32400"
+        description: Plex Media server
+        widget: 
+            type: plex
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:32400"
+            key: "{{HOMEPAGE_VAR_PLEX_CLAIM}}"
+    - Radarr: 
+        icon: radarr.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:7878"
+        description: Arr - Movies
+        widget: 
+            type: radarr
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:7878"
+            key: "{{HOMEPAGE_VAR_RADARR_TOKEN}}"
+            enableQueue: false # optional, defaults to false
+            # Allowed fields: ["wanted", "missing", "queued", "movies"].
+    - Sonarr: 
+        icon: sonarr.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:8989"
+        description: Arr - TV
+        widget: 
+            type: sonarr
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:8989"
+            key: "{{HOMEPAGE_VAR_SONARR_TOKEN}}"
+            enableQueue: false # optional, defaults to false
+            # Allowed fields: ["wanted", "queued", "series"].
+    - Prowlarr: 
+        icon: prowlarr.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:9696"
+        description: Arr - Manager
+        widget: 
+            type: prowlarr
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:9696"
+            key: "{{HOMEPAGE_VAR_PROWLARR_TOKEN}}"
+            # Allowed fields: ["numberOfGrabs", "numberOfQueries", "numberOfFailGrabs", "numberOfFailQueries"].
+    - Overseerr: 
+        icon: overseerr.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:5055"
+        description: Arr Request Manager
+        widget: 
+            type: overseerr
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:5055"
+            key: "{{HOMEPAGE_VAR_OVERSEER_TOKEN}}"
+            # Allowed fields: ["pending", "approved", "available", "processing"].    
+    - qBittorrent: 
+        icon: qbittorrent.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:8082"
+        description: qBittorrent - Torrent Client
+        widget:
+            type: qbittorrent
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:8082"
+            username: "{{HOMEPAGE_VAR_QBIT_USER}}"
+            password: "{{HOMEPAGE_VAR_QBIT_PASS}}"
+            enableLeechProgress: false # optional, defaults to false
+            enableLeechSize: true # optional, defaults to false
+            # Allowed fields: ["leech", "download", "seed", "upload"].
+
+
+# ---------------------
+# --- Row 5: Media ----
+# ---------------------
+- Tools:
+    - it-tools: 
+        icon: it-tools.svg
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:8071"
+        description: Developer & IT utilities
+    - bentopdf: 
+        icon: bentopdf.png
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:3005"
+        description: PDF tools
+    - convertx: 
+        icon: convertx.png
+        href: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:3002"
+        description: File Converter
+    
