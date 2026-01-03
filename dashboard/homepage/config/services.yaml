@@ -82,10 +82,9 @@
         container: npm
         widget:
             type: npm
-            url: "https://npm.{{HOMEPAGE_VAR_URLBASE}}"
+            url: "http://192.168.0.116:81"
             username: "{{HOMEPAGE_VAR_NPM_USER}}"
             password: "{{HOMEPAGE_VAR_NPM_PASS}}"
-
 # -------------------------
 # --- ROW 2: MONITORING ---
 # -------------------------
@@ -175,8 +174,30 @@
             key: "{{HOMEPAGE_VAR_TAILSCALE_KEY}}"
             fields: ["status", "last_seen"]
 
+### --------------------- ###
+### ------ Row 4: Cloud -------- ###
+### --------------------- ###
+- Cloud:
+    - Nextcloud:
+        icon: nextcloud.svg
+        href: "https://{{HOMEPAGE_VAR_JUPITER_IP}}:4043"
+        description: Cloud Storage
+        widget:
+            type: nextcloud
+            url: "https://{{HOMEPAGE_VAR_JUPITER_IP}}:4043"
+            username: "{{HOMEPAGE_VAR_NEXTCLOUD_USER}}"
+            password: "{{HOMEPAGE_VAR_NEXTCLOUD_PASS}}"
+    - Immich:
+        icon: immich.svg
+        href: "https://immich.{{HOMEPAGE_VAR_URLBASE}}"
+        description: Photo Storage
+        widget:
+            type: immich
+            url: "http://{{HOMEPAGE_VAR_JUPITER_IP}}:2283"
+            key: "{{HOMEPAGE_VAR_IMMICH_TOKEN}}"
+            version: 2
 # ---------------------
-# --- Row 4: Media ----
+# --- Row 5: Media ----
 # ---------------------
 - Media:
     - Plex: 

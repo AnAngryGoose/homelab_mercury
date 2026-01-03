@@ -22,6 +22,10 @@ layout:
     tab: Applications
     style: row 
     columns: 4
+  Cloud: 
+    tab: Applications
+    style: row
+    columns: 2
   Media: 
     tab: Applications
     style: row

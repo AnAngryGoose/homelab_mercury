@@ -1,0 +1,15 @@
+services:
+  samba:
+    image: dockurr/samba
+    container_name: samba
+    restart: always
+    environment:
+      NAME: "Mercury_Samba"
+      USER: "goose"
+      PASS: ${SAMBAPASS}
+      GID: "1000"
+    ports:
+      - 445:445
+    volumes:
+      # MergerFS Pool
+      - /home/goose/share:/home
