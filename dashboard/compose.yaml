@@ -73,15 +73,22 @@ services:
   dozzle:
     image: amir20/dozzle:latest # https://github.com/amir20/dozzle
     container_name: dozzle
+    command: --remote-agent 192.168.0.11:7007 # connect to remote agent
+    ports:
+      - "8081:8080" # Web UI on port 8081
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - DOZZLE_LEVEL=info
+      - DOZZLE_LEVEL=info 
     networks: 
-      - proxy_net
-    ports:
-      - "8081:8080" # Web UI on port 8081
+      - proxy_net # to allow npm access (using container name only)
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      start_interval: 5s
 
 
   # --- Uptime Kuma: Service Monitor ---
@@ -117,18 +124,26 @@ services:
 
   # --- BESZEL AGENT (The Sensor) ---
   beszel-agent:
-    image: henrygd/beszel-agent # https://github.com/henrygd/beszel
+    image: henrygd/beszel-agent:alpine # https://github.com/henrygd/beszel
     container_name: beszel-agent
     restart: unless-stopped
-    network_mode: "host"  # CRITICAL: Must be on host to read actual CPU/Disk/Network
+    network_mode: host  # CRITICAL: Must be on host to read actual CPU/Disk/Network
+    devices:
+      - /dev/sda:/dev/sda # Required for S.M.A.R.T. data
+      - /dev/nvme0:/dev/nvme0 # Required for NVMe S.M.A.R.T. data
+    cap_add:
+      - SYS_RAWIO # required for S.M.A.R.T. data
+      - SYS_ADMIN # required for NVMe S.M.A.R.T. data
+
     volumes:
+      - ./beszel_agent_data:/var/lib/beszel-agent
       - /var/run/docker.sock:/var/run/docker.sock:ro # To monitor other docker containers
-      - /dev/dri:/dev/dri # For GPU monitoring 
-      - /:/mnt/root_drive:ro
+     # monitor other disks / partitions by mounting a folder in /extra-filesystems
+      - /mnt/sda3:/extra-filesystems/root_drive:ro
+      - /mnt/nvme_storage:/extra-filesystems/appdata:ro
     environment:
       - PORT=45876
       - KEY=${BESZEL_KEY} 
-      - EXTRA_FILESYSTEMS=/mnt/root_drive
 networks:
   proxy_net:
     external: true

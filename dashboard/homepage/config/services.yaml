@@ -178,15 +178,16 @@
 ### ------ Row 4: Cloud -------- ###
 ### --------------------- ###
 - Cloud:
-    - Nextcloud:
-        icon: nextcloud.svg
-        href: "https://{{HOMEPAGE_VAR_JUPITER_IP}}:4043"
-        description: Cloud Storage
+    - Filebrowser: # NEED TO FIX SSL
+        icon: filebrowser.svg
+        href: "https://files.{{HOMEPAGE_VAR_URLBASE}}"
+        description: File Browser
         widget:
-            type: nextcloud
-            url: "https://{{HOMEPAGE_VAR_JUPITER_IP}}:4043"
-            username: "{{HOMEPAGE_VAR_NEXTCLOUD_USER}}"
-            password: "{{HOMEPAGE_VAR_NEXTCLOUD_PASS}}"
+            type: filebrowser
+            url: "https://files.{{HOMEPAGE_VAR_URLBASE}}"
+            username: "{{HOMEPAGE_VAR_FILEBROWSER_USER}}"
+            password: "{{HOMEPAGE_VAR_FILEBROWSER_PASS}}"
+            #  authHeader: X-My-Header # If using Proxy header authentication
     - Immich:
         icon: immich.svg
         href: "https://immich.{{HOMEPAGE_VAR_URLBASE}}"
