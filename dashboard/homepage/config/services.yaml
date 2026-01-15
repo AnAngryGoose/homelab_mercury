@@ -141,6 +141,26 @@
 # --- ROW 3: NETWORKING ---
 # -------------------------
 - Networking:
+    - OPNSense :
+        icon: omada.svg
+        href: "https://{{HOMEPAGE_VAR_OPNSENSE_IP}}"
+        description: OPNSense 
+        widget:
+          type: opnsense
+          url: https://{{HOMEPAGE_VAR_OPNSENSE_IP}}
+          username: "{{HOMEPAGE_VAR_OPNSENSE_USER}}"
+          password: "{{HOMEPAGE_VAR_OPNSENSE_PASS}}"
+          wan: opt1 # optional, defaults to wan
+    - Adguard Home:
+        icon: adguardhome.svg
+        href: "http://{{HOMEPAGE_VAR_OPNSENSE_IP}}:3000"
+        description: Adguard Home DNS * Ad Blocker 
+        widget:
+          type: adguard
+          url: http://{{HOMEPAGE_VAR_OPNSENSE_IP}}:3000
+          username: "{{HOMEPAGE_VAR_ADGUARD_USER}}"
+          password: "{{HOMEPAGE_VAR_ADGUARD_PASS}}"
+          wan: opt1 # optional, defaults to wan
     - Omada Controller:
         icon: omada.svg
         href: "https://omada.{{HOMEPAGE_VAR_URLBASE}}"
@@ -153,16 +173,6 @@
             username: "{{HOMEPAGE_VAR_OMADA_USER}}"
             password: "{{HOMEPAGE_VAR_OMADA_PASS}}"
             site: "{{HOMEPAGE_VAR_OMADA_SITE}}"
-
-    - Pi-hole:
-        icon: pi-hole.svg
-        href: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}/admin"
-        description: DNS Sinkhole
-        widget:
-            type: pihole
-            url: "http://{{HOMEPAGE_VAR_TAILSCALE_URL_PIHOLE}}"
-            key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
-            version: 6
 
     - Tailscale:
         icon: tailscale.svg
